@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة المستخدم — ياسر قطب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo" onclick="window.location='../index.html'">
+    <div class="logo-icon">ق</div>
+    <div>
+      <div class="logo-text">ياسر قطب للمؤلفات القانونية</div>
+      <div class="logo-sub">المكتبة القانونية الرقمية</div>
+    </div>
+  </div>
+  <div class="nav-btns" id="navBtns"></div>
+</nav>
+
+<div class="dash-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-user">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-avatar" id="sideAvatar">م</div>
+        <div>
+          <div style="font-size:14px;font-weight:600" id="sideUserName">المستخدم</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4)" id="sideUserPlan">خطة مجانية</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-title">القائمة الرئيسية</div>
+    <div class="sidebar-item active" onclick="switchSection('overview')"><span class="sidebar-icon">📊</span>نظرة عامة</div>
+    <div class="sidebar-item" onclick="switchSection('history')"><span class="sidebar-icon">📋</span>سجل القراءة</div>
+    <a class="sidebar-item" href="library.html"><span class="sidebar-icon">📚</span>المكتبة القانونية</a>
+    <a class="sidebar-item" href="subscription.html"><span class="sidebar-icon">💎</span>الاشتراكات</a>
+    <div class="sidebar-bottom">
+      <div class="sidebar-item" onclick="logout()"><span class="sidebar-icon">🚪</span>تسجيل الخروج</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="dash-content">
+
+    <!-- OVERVIEW -->
+    <div id="sec-overview">
+      <div class="dash-header">
+        <h1 id="dashWelcome">مرحباً</h1>
+        <p>إليك ملخص نشاطك اليوم على المنصة</p>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">وثائق تمت قراءتها</div><div class="metric-val">٧</div><div class="metric-sub">↑ ٣ وثائق هذا الأسبوع</div></div>
+        <div class="metric"><div class="metric-label">كلمات منسوخة اليوم</div><div class="metric-val" id="metWords">٠</div><div class="metric-sub" id="metWordsSub">متبقي ٥٠٠ كلمة</div></div>
+        <div class="metric"><div class="metric-label">وقت القراءة</div><div class="metric-val">٢.٥</div><div class="metric-sub">ساعة اليوم</div></div>
+        <div class="metric"><div class="metric-label">وثائق محفوظة</div><div class="metric-val">١٢</div><div class="metric-sub">آخر حفظ: اليوم</div></div>
+      </div>
+      <div class="quota-card">
+        <div class="quota-top">
+          <h3>حصة النسخ اليومية</h3>
+          <span class="badge badge-free" id="quotaBadge">خطة مجانية</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="quotaBar" style="width:0%"></div></div>
+        <div class="quota-nums">
+          <span id="quotaUsed">٠ كلمة منسوخة</span>
+          <span id="quotaTotal">من أصل ٥٠٠ كلمة/يوم</span>
+        </div>
+        <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <a class="btn-gold" href="subscription.html">⬆ ترقية للاحترافي</a>
+          <span style="font-size:12px;color:var(--text3)">يتجدد الحد تلقائياً كل ٢٤ ساعة</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>آخر الوثائق المطالعة</h3></div>
+        <table>
+          <thead><tr><th>العنوان</th><th>التصنيف</th><th>التاريخ</th><th>الكلمات</th></tr></thead>
+          <tbody>
+            <tr><td>نظرية الالتزام في القانون المدني المصري</td><td><span class="doc-cat">مدني</span></td><td>اليوم</td><td>١٢٠</td></tr>
+            <tr><td>شرح قانون العقوبات - الجرائم الاقتصادية</td><td><span class="doc-cat">جنائي</span></td><td>أمس</td><td>٢٢٠</td></tr>
+            <tr><td>عقود الاستثمار الأجنبي في التشريع المصري</td><td><span class="doc-cat">تجاري</span></td><td>٣ أيام</td><td>٨٠</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="sec-history" class="hidden">
+      <div class="dash-header"><h1>سجل القراءة والاستخدام</h1><p>تاريخ نشاطك الكامل على المنصة</p></div>
+      <div class="card">
+        <div class="card-head"><h3>سجل الأنشطة التفصيلي</h3></div>
+        <table>
+          <thead><tr><th>الوثيقة</th><th>النشاط</th><th>الكلمات</th><th>التاريخ والوقت</th></tr></thead>
+          <tbody>
+            <tr><td>نظرية الالتزام في القانون المدني</td><td>نسخ نص</td><td>١٢٠</td><td>اليوم ١٠:٣٠</td></tr>
+            <tr><td>قانون العقوبات - الجرائم الاقتصادية</td><td>قراءة</td><td>—</td><td>أمس ١٤:١٥</td></tr>
+            <tr><td>عقود الاستثمار الأجنبي</td><td>نسخ نص</td><td>٢٢٠</td><td>أمس ١١:٠٠</td></tr>
+            <tr><td>أحكام محكمة النقض - العقود التجارية</td><td>قراءة</td><td>—</td><td>منذ ٣ أيام</td></tr>
+            <tr><td>القانون الإداري - نظرية المرفق العام</td><td>نسخ نص</td><td>٨٠</td><td>منذ ٥ أيام</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+if (!requireLogin()) void 0;
+renderNav();
+
+const S = getSession();
+
+function updateDashboard() {
+  if (!S) return;
+  const usage = getUsage();
+  const limit = getLimit(S);
+  const pct = Math.min(100, Math.round(usage.words / limit * 100));
+
+  document.getElementById('dashWelcome').textContent = `مرحباً، ${S.name}`;
+  document.getElementById('sideUserName').textContent = S.name;
+  document.getElementById('sideAvatar').textContent   = S.name.charAt(0) || 'م';
+  document.getElementById('sideUserPlan').textContent = S.plan === 'premium' ? 'خطة احترافية' : 'خطة مجانية';
+  document.getElementById('metWords').textContent     = usage.words.toLocaleString('ar-EG');
+  document.getElementById('metWordsSub').textContent  = S.plan === 'premium' ? 'غير محدود' : `متبقي ${Math.max(0, limit - usage.words).toLocaleString('ar-EG')} كلمة`;
+  document.getElementById('quotaBadge').className     = 'badge ' + (S.plan === 'premium' ? 'badge-premium' : 'badge-free');
+  document.getElementById('quotaBadge').textContent   = S.plan === 'premium' ? 'خطة احترافية' : 'خطة مجانية';
+  const bar = document.getElementById('quotaBar');
+  bar.style.width = pct + '%';
+  bar.className   = 'progress-fill' + (pct >= 90 ? ' danger' : '');
+  document.getElementById('quotaUsed').textContent  = `${usage.words.toLocaleString('ar-EG')} كلمة منسوخة`;
+  document.getElementById('quotaTotal').textContent = S.plan === 'premium' ? 'غير محدود' : `من أصل ${limit.toLocaleString('ar-EG')} كلمة/يوم`;
+}
+
+function switchSection(sec) {
+  document.querySelectorAll('[id^="sec-"]').forEach(el => el.classList.add('hidden'));
+  document.getElementById('sec-' + sec).classList.remove('hidden');
+  const map = { overview: 0, history: 1 };
+  document.querySelectorAll('.sidebar-item').forEach((el, i) => el.classList.toggle('active', i === map[sec]));
+}
+
+updateDashboard();
+</script>
+</body>
+</html>

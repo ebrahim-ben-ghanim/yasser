@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عرض الوثيقة — ياسر قطب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo" onclick="window.location='../index.html'">
+    <div class="logo-icon">ق</div>
+    <div>
+      <div class="logo-text">ياسر قطب للمؤلفات القانونية</div>
+      <div class="logo-sub">المكتبة القانونية الرقمية</div>
+    </div>
+  </div>
+  <div class="nav-btns" id="navBtns"></div>
+</nav>
+
+<div class="doc-view">
+  <a class="back-btn" href="library.html">← العودة للمكتبة</a>
+
+  <div class="doc-view-header">
+    <div class="doc-cat" id="viewCat" style="margin-bottom:10px"></div>
+    <h1 id="viewTitle"></h1>
+    <div style="display:flex;gap:20px;font-size:13px;color:var(--text3);flex-wrap:wrap">
+      <span id="viewAuthor"></span>
+      <span id="viewYear"></span>
+      <span id="viewViews"></span>
+    </div>
+  </div>
+
+  <div class="quota-warning" id="quotaWarning">
+    ⚠️ لقد استنفدت حصتك اليومية من النسخ (٥٠٠ كلمة). يتجدد الحد تلقائياً خلال ٢٤ ساعة.
+    <a href="subscription.html">ترقية للاحترافي ←</a>
+  </div>
+
+  <div class="reading-mode" id="viewContent" onmouseup="handleCopy()"></div>
+</div>
+
+<div class="copy-notice" id="copyNotice"></div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+renderNav();
+
+// load doc from URL param
+const params = new URLSearchParams(window.location.search);
+const docId  = parseInt(params.get('id'));
+const docs   = getDocs();
+const doc    = docs.find(d => d.id === docId);
+
+if (!doc) {
+  document.querySelector('.doc-view').innerHTML = '<p style="font-size:18px;color:var(--text2);text-align:center;padding:60px">الوثيقة غير موجودة. <a href="library.html">العودة للمكتبة</a></p>';
+} else {
+  doc.views++;
+  saveDocs(docs);
+
+  document.title = doc.title + ' — ياسر قطب';
+  document.getElementById('viewCat').textContent     = doc.cat;
+  document.getElementById('viewTitle').textContent   = doc.title;
+  document.getElementById('viewAuthor').textContent  = '✍️ ' + doc.author;
+  document.getElementById('viewYear').textContent    = '📅 ' + doc.year;
+  document.getElementById('viewViews').textContent   = '👁 ' + doc.views.toLocaleString('ar-EG') + ' مشاهدة';
+  document.getElementById('viewContent').textContent = doc.content;
+
+  const s     = getSession();
+  const usage = getUsage();
+  const limit = getLimit(s);
+  document.getElementById('quotaWarning').style.display = (s && usage.words >= limit) ? 'block' : 'none';
+}
+
+function handleCopy() {
+  const sel = window.getSelection().toString().trim();
+  if (!sel || sel.length < 2) return;
+  const words = sel.split(/\s+/).length;
+  const s = getSession();
+  if (!s) { showCopyNotice('⚠️ يجب تسجيل الدخول لنسخ النصوص'); return; }
+  const usage = getUsage();
+  const limit = getLimit(s);
+
+  if (usage.words >= limit) {
+    showCopyNotice('⛔ تجاوزت الحد اليومي للنسخ!');
+    document.getElementById('quotaWarning').style.display = 'block';
+    try { window.getSelection().removeAllRanges(); } catch (e) {}
+    return;
+  }
+  const remaining = limit - usage.words;
+  if (words > remaining) { showCopyNotice(`⚠️ متبقي ${remaining} كلمة فقط من حصتك`); return; }
+  usage.words += words;
+  saveUsage(usage);
+  showCopyNotice(`✓ تم نسخ ${words} كلمة — متبقي ${Math.max(0, limit - usage.words).toLocaleString('ar-EG')} كلمة`);
+}
+</script>
+</body>
+</html>

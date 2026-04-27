@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لوحة الإدارة — ياسر قطب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo" onclick="window.location='../index.html'">
+    <div class="logo-icon">ق</div>
+    <div>
+      <div class="logo-text">ياسر قطب للمؤلفات القانونية</div>
+      <div class="logo-sub">المكتبة القانونية الرقمية</div>
+    </div>
+  </div>
+  <div class="nav-btns" id="navBtns"></div>
+</nav>
+
+<div class="dash-wrap">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-user">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="user-avatar">أ</div>
+        <div>
+          <div style="font-size:14px;font-weight:600">المدير العام</div>
+          <div style="font-size:11px;color:var(--gold2)">صلاحيات كاملة</div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-title">إدارة المنصة</div>
+    <div class="sidebar-item active" onclick="switchAdmin('overview')"><span class="sidebar-icon">📊</span>الإحصاءات العامة</div>
+    <div class="sidebar-item" onclick="switchAdmin('add')"><span class="sidebar-icon">➕</span>إضافة مؤلف جديد</div>
+    <div class="sidebar-item" onclick="switchAdmin('manage')"><span class="sidebar-icon">📚</span>إدارة المؤلفات</div>
+    <div class="sidebar-item" onclick="switchAdmin('users')"><span class="sidebar-icon">👥</span>إدارة المستخدمين</div>
+    <div class="sidebar-bottom">
+      <div class="sidebar-item" onclick="logout()"><span class="sidebar-icon">🚪</span>تسجيل الخروج</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="dash-content">
+
+    <!-- OVERVIEW -->
+    <div id="admin-overview">
+      <div class="dash-header"><h1>لوحة الإدارة المتكاملة</h1><p>إحصاءات المنصة في الوقت الفعلي</p></div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">إجمالي المستخدمين</div><div class="metric-val">٨٩٢٣</div><div class="metric-sub">↑ ١٢٤ هذا الأسبوع</div></div>
+        <div class="metric"><div class="metric-label">المشتركون الاحترافيون</div><div class="metric-val">٢٣٤١</div><div class="metric-sub">٢٦٪ من الإجمالي</div></div>
+        <div class="metric"><div class="metric-label">إجمالي المؤلفات</div><div class="metric-val" id="adminDocCount">—</div><div class="metric-sub">↑ ٥ جديدة هذا الشهر</div></div>
+        <div class="metric"><div class="metric-label">مشاهدات اليوم</div><div class="metric-val">٤٤٢٧</div><div class="metric-sub">↑ ١٥٪ عن الأمس</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>أكثر المؤلفات مشاهدةً</h3></div>
+        <table>
+          <thead><tr><th>العنوان</th><th>التصنيف</th><th>المشاهدات</th><th>الكلمات المنسوخة</th></tr></thead>
+          <tbody>
+            <tr><td>نظرية الالتزام في القانون المدني</td><td><span class="doc-cat">مدني</span></td><td>٢٣٤٥</td><td>١٢٣٤٠</td></tr>
+            <tr><td>قانون العقوبات - النظرية العامة</td><td><span class="doc-cat">جنائي</span></td><td>١٨٩٠</td><td>٩٨٢٠</td></tr>
+            <tr><td>عقود الشركات التجارية</td><td><span class="doc-cat">تجاري</span></td><td>١٥٦٠</td><td>٨٤٣٠</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>المستخدمون النشطون اليوم</h3></div>
+        <table>
+          <thead><tr><th>المستخدم</th><th>الخطة</th><th>الكلمات المنسوخة</th><th>الحالة</th></tr></thead>
+          <tbody>
+            <tr><td>محمد أحمد</td><td><span class="badge badge-premium">احترافي</span></td><td>١٢٣٤</td><td><span class="online-dot"></span>نشط</td></tr>
+            <tr><td>سارة محمود</td><td><span class="badge badge-free">مجاني</span></td><td>٤٩٨/٥٠٠</td><td><span class="online-dot"></span>نشط</td></tr>
+            <tr><td>خالد عبدالله</td><td><span class="badge badge-premium">احترافي</span></td><td>٨٧٦</td><td>متصل</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD DOC -->
+    <div id="admin-add" class="hidden">
+      <div class="dash-header"><h1>إضافة مؤلف قانوني جديد</h1><p>أدخل تفاصيل المؤلف القانوني</p></div>
+      <div id="addAlert" class="alert"></div>
+      <div class="admin-form-grid">
+        <div class="card">
+          <div class="card-head"><h3>بيانات المؤلف</h3></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="form-group"><label>عنوان المؤلف</label><input type="text" id="newTitle" placeholder="العنوان الكامل"></div>
+              <div class="form-group"><label>التصنيف</label>
+                <select id="newCat">
+                  <option>قانون مدني</option><option>قانون جنائي</option><option>قانون تجاري</option>
+                  <option>قانون دستوري</option><option>قانون دولي</option><option>قانون إداري</option><option>قانون العمل</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group"><label>المحتوى القانوني الكامل</label><textarea id="newContent" style="min-height:180px" placeholder="أدخل النص القانوني الكامل..."></textarea></div>
+            <div class="form-row">
+              <div class="form-group"><label>المؤلف / المرجع</label><input type="text" id="newAuthor" placeholder="اسم المؤلف"></div>
+              <div class="form-group"><label>سنة الإصدار</label><input type="text" id="newYear" placeholder="٢٠٢٤"></div>
+            </div>
+            <button class="btn-gold" onclick="saveDoc()">➕ حفظ المؤلف في المكتبة</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>إرشادات الإضافة</h3></div>
+          <div class="card-body" style="font-size:13px;color:var(--text2);line-height:2.2">
+            <p>✦ تأكد من صحة النص القانوني قبل النشر</p>
+            <p>✦ اختر التصنيف المناسب بدقة</p>
+            <p>✦ أضف المراجع والمصادر عند الحاجة</p>
+            <p>✦ المحتوى يظهر فور الإضافة في المكتبة</p>
+            <p>✦ يمكن تعديل أو حذف المؤلف لاحقاً من قسم الإدارة</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGE DOCS -->
+    <div id="admin-manage" class="hidden">
+      <div class="dash-header"><h1>إدارة المؤلفات القانونية</h1><p>عرض وتعديل وحذف المؤلفات</p></div>
+      <div class="card">
+        <div class="card-head"><h3>جميع المؤلفات</h3><button class="btn-gold" onclick="switchAdmin('add')">+ إضافة جديد</button></div>
+        <table>
+          <thead><tr><th>العنوان</th><th>التصنيف</th><th>المشاهدات</th><th>الإجراءات</th></tr></thead>
+          <tbody id="adminDocsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USERS -->
+    <div id="admin-users" class="hidden">
+      <div class="dash-header"><h1>إدارة المستخدمين</h1><p>عرض وإدارة جميع الحسابات المسجلة</p></div>
+      <div class="card">
+        <div class="card-head"><h3>المستخدمون المسجلون</h3></div>
+        <table>
+          <thead><tr><th>الاسم</th><th>اسم المستخدم</th><th>الخطة</th><th>تاريخ التسجيل</th><th>الحالة</th></tr></thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="copy-notice" id="copyNotice"></div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script>
+if (!requireAdmin()) void 0;
+renderNav();
+
+let editingId = null;
+
+function switchAdmin(sec) {
+  ['overview', 'add', 'manage', 'users'].forEach(s => {
+    const el = document.getElementById('admin-' + s);
+    if (el) el.classList.toggle('hidden', s !== sec);
+  });
+  const map = { overview: 0, add: 1, manage: 2, users: 3 };
+  document.querySelectorAll('.sidebar-item').forEach((el, i) => el.classList.toggle('active', i === map[sec]));
+  if (sec === 'manage') renderAdminDocs();
+  if (sec === 'users')  renderUsersTable();
+}
+
+function updateDocCount() {
+  const el = document.getElementById('adminDocCount');
+  if (el) el.textContent = getDocs().length.toLocaleString('ar-EG');
+}
+
+function renderAdminDocs() {
+  const tbody = document.getElementById('adminDocsTbody');
+  if (!tbody) return;
+  tbody.innerHTML = getDocs().map(d => `
+    <tr>
+      <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${d.title}</td>
+      <td><span class="doc-cat">${d.cat}</span></td>
+      <td>${d.views.toLocaleString('ar-EG')}</td>
+      <td style="white-space:nowrap">
+        <button class="btn-edit"   onclick="editDoc(${d.id})">تعديل</button>&nbsp;
+        <button class="btn-danger" onclick="deleteDoc(${d.id})">حذف</button>
+      </td>
+    </tr>`).join('');
+  updateDocCount();
+}
+
+function deleteDoc(id) {
+  if (!confirm('هل أنت متأكد من حذف هذا المؤلف نهائياً؟')) return;
+  saveDocs(getDocs().filter(d => d.id !== id));
+  renderAdminDocs();
+  showCopyNotice('✓ تم حذف المؤلف بنجاح');
+}
+
+function editDoc(id) {
+  const doc = getDocs().find(d => d.id === id);
+  if (!doc) return;
+  editingId = id;
+  switchAdmin('add');
+  document.getElementById('newTitle').value   = doc.title;
+  document.getElementById('newContent').value = doc.content;
+  document.getElementById('newAuthor').value  = doc.author;
+  document.getElementById('newYear').value    = doc.year;
+  document.getElementById('newCat').value     = doc.cat;
+  showAlert('addAlert', 'وضع التعديل — قم بالتغييرات ثم اضغط حفظ', 'success');
+}
+
+function saveDoc() {
+  const title   = document.getElementById('newTitle').value.trim();
+  const content = document.getElementById('newContent').value.trim();
+  const author  = document.getElementById('newAuthor').value.trim();
+  const year    = document.getElementById('newYear').value.trim();
+  const cat     = document.getElementById('newCat').value;
+  if (!title || !content) { showAlert('addAlert', 'يرجى ملء العنوان والمحتوى على الأقل', 'danger'); return; }
+  const docs = getDocs();
+  if (editingId) {
+    const idx = docs.findIndex(d => d.id === editingId);
+    if (idx >= 0) docs[idx] = { ...docs[idx], title, content, author: author || 'غير محدد', year: year || '٢٠٢٤', cat };
+    editingId = null;
+  } else {
+    docs.push({ id: Date.now(), title, cat, author: author || 'غير محدد', year: year || '٢٠٢٤', views: 0, content });
+  }
+  saveDocs(docs);
+  ['newTitle', 'newContent', 'newAuthor', 'newYear'].forEach(id => document.getElementById(id).value = '');
+  showAlert('addAlert', '✓ تمت العملية بنجاح! المؤلف متاح الآن في المكتبة', 'success');
+  updateDocCount();
+}
+
+function renderUsersTable() {
+  const tbody = document.getElementById('usersTableBody');
+  if (!tbody) return;
+  tbody.innerHTML = getUsers().map(u => `
+    <tr>
+      <td>${u.name}</td>
+      <td style="font-family:monospace">${u.username}</td>
+      <td><span class="badge ${u.plan === 'admin' ? 'badge-admin' : u.plan === 'premium' ? 'badge-premium' : 'badge-free'}">${u.plan === 'admin' ? 'مدير' : u.plan === 'premium' ? 'احترافي' : 'مجاني'}</span></td>
+      <td>${u.date}</td>
+      <td><span class="online-dot"></span>نشط</td>
+    </tr>`).join('');
+}
+
+updateDocCount();
+</script>
+</body>
+</html>

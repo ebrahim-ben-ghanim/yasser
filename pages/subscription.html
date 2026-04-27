@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاشتراكات — ياسر قطب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo" onclick="window.location='../index.html'">
+    <div class="logo-icon">ق</div>
+    <div>
+      <div class="logo-text">ياسر قطب للمؤلفات القانونية</div>
+      <div class="logo-sub">المكتبة القانونية الرقمية</div>
+    </div>
+  </div>
+  <div class="nav-btns" id="navBtns"></div>
+</nav>
+
+<div class="sub-wrap">
+  <div class="section-title">
+    <h2>اختر خطة الاشتراك المناسبة</h2>
+    <div class="gold-line"></div>
+    <p>استمتع بأقصى استفادة من المكتبة القانونية الرقمية</p>
+  </div>
+
+  <div class="plan-grid">
+    <!-- FREE -->
+    <div class="plan">
+      <h3>المجاني</h3>
+      <div class="plan-price">٠<span> جنيه</span></div>
+      <div class="plan-period">مجاناً للأبد</div>
+      <ul class="plan-features">
+        <li><span class="chk">✓</span>الوصول للمكتبة العامة</li>
+        <li><span class="chk">✓</span>٥٠٠ كلمة نسخ يومياً</li>
+        <li><span class="chk">✓</span>قراءة غير محدودة</li>
+        <li><span class="crs">✗</span>تنزيل الوثائق</li>
+        <li><span class="crs">✗</span>الأرشيف الكامل</li>
+        <li><span class="crs">✗</span>دعم فني متقدم</li>
+      </ul>
+      <button class="plan-btn" onclick="alert('أنت على الخطة المجانية بالفعل')">الخطة الحالية</button>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="plan featured">
+      <div class="plan-tag">⭐ الأكثر طلباً</div>
+      <h3>الاحترافي</h3>
+      <div class="plan-price">٢٩٩<span> جنيه</span></div>
+      <div class="plan-period">شهرياً — ٢,٩٩٠ جنيه سنوياً</div>
+      <ul class="plan-features">
+        <li><span class="chk">✓</span>وصول كامل للمكتبة</li>
+        <li><span class="chk">✓</span>نسخ غير محدود يومياً</li>
+        <li><span class="chk">✓</span>تنزيل الوثائق PDF</li>
+        <li><span class="chk">✓</span>الأرشيف القانوني الكامل</li>
+        <li><span class="chk">✓</span>دعم فني ٢٤/٧</li>
+        <li><span class="chk">✓</span>تحديثات فورية بالمستجدات</li>
+      </ul>
+      <button class="plan-btn" onclick="showPayCard()">اشترك الآن</button>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="plan">
+      <h3>المؤسسي</h3>
+      <div class="plan-price">٩٩٩<span> جنيه</span></div>
+      <div class="plan-period">شهرياً / لكل مستخدم</div>
+      <ul class="plan-features">
+        <li><span class="chk">✓</span>جميع مزايا الاحترافي</li>
+        <li><span class="chk">✓</span>حسابات متعددة للفريق</li>
+        <li><span class="chk">✓</span>إحصاءات المؤسسة</li>
+        <li><span class="chk">✓</span>API للتكامل مع الأنظمة</li>
+        <li><span class="chk">✓</span>مدير حساب مخصص</li>
+        <li><span class="chk">✓</span>تدريب وتأهيل الفريق</li>
+      </ul>
+      <button class="plan-btn" onclick="alert('يرجى التواصل: info@yasser-otba.com')">تواصل معنا</button>
+    </div>
+  </div>
+
+  <!-- PAYMENT CARD -->
+  <div id="payCard" class="hidden">
+    <div class="pay-card">
+      <h3>بيانات الدفع الآمن</h3>
+      <div id="payAlert" class="alert"></div>
+      <div class="form-group"><label>اسم حامل البطاقة</label><input type="text" id="cardName" placeholder="الاسم كما هو مكتوب على البطاقة"></div>
+      <div class="form-group"><label>رقم البطاقة</label><input type="text" id="cardNum" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" oninput="formatCard(this)"></div>
+      <div class="form-row">
+        <div class="form-group"><label>تاريخ الانتهاء</label><input type="text" placeholder="MM/YY" maxlength="5"></div>
+        <div class="form-group"><label>رمز CVV</label><input type="password" placeholder="XXX" maxlength="3"></div>
+      </div>
+      <button class="btn-block" onclick="processPayment()">🔒 إتمام الدفع الآمن</button>
+      <p class="pay-secure">🔒 جميع البيانات مشفرة بأعلى معايير الأمان SSL/TLS</p>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/app.js"></script>
+<script>
+renderNav();
+
+function showPayCard() {
+  document.getElementById('payCard').classList.remove('hidden');
+  setTimeout(() => document.getElementById('payCard').scrollIntoView({ behavior: 'smooth' }), 100);
+}
+
+function processPayment() {
+  const name = document.getElementById('cardName').value.trim();
+  const num  = document.getElementById('cardNum').value.replace(/\s/g, '');
+  if (!name || num.length < 16) { showAlert('payAlert', 'يرجى إدخال بيانات البطاقة بشكل كامل', 'danger'); return; }
+
+  showAlert('payAlert', '✓ تمت عملية الدفع بنجاح! جارٍ ترقية حسابك...', 'success');
+  const s = getSession();
+  if (s) {
+    s.plan = 'premium';
+    setSession(s);
+    const users = getUsers().map(u => u.id === s.id ? { ...u, plan: 'premium' } : u);
+    saveUsers(users);
+  }
+  setTimeout(() => window.location.href = 'dashboard.html', 2000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الدخول — ياسر قطب</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo" onclick="window.location='../index.html'">
+    <div class="logo-icon">ق</div>
+    <div>
+      <div class="logo-text">ياسر قطب للمؤلفات القانونية</div>
+      <div class="logo-sub">المكتبة القانونية الرقمية</div>
+    </div>
+  </div>
+  <div class="nav-btns" id="navBtns"></div>
+</nav>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="logo-icon" style="width:56px;height:56px;font-size:26px;margin:0 auto 12px">ق</div>
+      <h2>ياسر قطب للمؤلفات القانونية</h2>
+      <p>المنصة القانونية الرقمية المتكاملة</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login')">تسجيل الدخول</div>
+      <div class="tab" onclick="switchTab('register')">إنشاء حساب</div>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <div id="alertLogin" class="alert"></div>
+      <div class="form-group">
+        <label>اسم المستخدم</label>
+        <input type="text" id="loginUser" placeholder="أدخل اسم المستخدم" value="user">
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="loginPass" placeholder="أدخل كلمة المرور" value="user123">
+      </div>
+      <button class="btn-block" onclick="doLogin()">دخول إلى المنصة</button>
+      <p class="hint-text">للدخول كمدير: admin / admin123 &nbsp;|&nbsp; مستخدم: user / user123</p>
+    </div>
+
+    <!-- REGISTER -->
+    <div id="registerForm" class="hidden">
+      <div id="alertRegister" class="alert"></div>
+      <div class="form-group">
+        <label>الاسم الكامل</label>
+        <input type="text" id="regName" placeholder="أدخل اسمك الكامل">
+      </div>
+      <div class="form-group">
+        <label>اسم المستخدم</label>
+        <input type="text" id="regUser" placeholder="اختر اسم مستخدم فريد">
+      </div>
+      <div class="form-group">
+        <label>كلمة المرور</label>
+        <input type="password" id="regPass" placeholder="٦ أحرف على الأقل">
+      </div>
+      <div class="form-group">
+        <label>نوع الحساب</label>
+        <select id="regType">
+          <option value="free">مجاني — ٥٠٠ كلمة/يوم</option>
+          <option value="premium">احترافي — غير محدود</option>
+        </select>
+      </div>
+      <button class="btn-block" onclick="doRegister()">إنشاء الحساب</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/app.js"></script>
+<script>
+// redirect if already logged in
+const _s = getSession();
+if (_s) window.location.href = _s.type === 'admin' ? 'admin.html' : 'dashboard.html';
+renderNav();
+
+function switchTab(t) {
+  document.getElementById('loginForm').classList.toggle('hidden', t !== 'login');
+  document.getElementById('registerForm').classList.toggle('hidden', t !== 'register');
+  document.querySelectorAll('.tab').forEach((el, i) =>
+    el.classList.toggle('active', (i === 0 && t === 'login') || (i === 1 && t === 'register')));
+}
+
+function doLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if (!u || !p) { showAlert('alertLogin', 'يرجى إدخال اسم المستخدم وكلمة المرور', 'danger'); return; }
+  const found = getUsers().find(x => x.username === u && x.password === p);
+  if (!found) { showAlert('alertLogin', 'اسم المستخدم أو كلمة المرور غير صحيحة', 'danger'); return; }
+  setSession(found);
+  window.location.href = found.type === 'admin' ? 'admin.html' : 'dashboard.html';
+}
+
+function doRegister() {
+  const name = document.getElementById('regName').value.trim();
+  const user = document.getElementById('regUser').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const plan = document.getElementById('regType').value;
+  if (!name || !user || !pass) { showAlert('alertRegister', 'يرجى ملء جميع الحقول', 'danger'); return; }
+  if (pass.length < 6) { showAlert('alertRegister', 'كلمة المرور يجب أن تكون ٦ أحرف على الأقل', 'danger'); return; }
+  const users = getUsers();
+  if (users.find(x => x.username === user)) { showAlert('alertRegister', 'اسم المستخدم مستخدم بالفعل', 'danger'); return; }
+  const newUser = { id: Date.now(), name, username: user, password: pass, type: 'user', plan, date: new Date().getFullYear().toString() };
+  users.push(newUser); saveUsers(users); setSession(newUser);
+  showAlert('alertRegister', '✓ تم إنشاء الحساب بنجاح! جارٍ التوجيه...', 'success');
+  setTimeout(() => window.location.href = 'dashboard.html', 1500);
+}
+</script>
+</body>
+</html>
