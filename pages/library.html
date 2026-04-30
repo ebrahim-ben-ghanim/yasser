@@ -18,18 +18,22 @@
     </div>
   </div>
   <div class="nav-btns" id="navBtns"></div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu hidden" id="mobileMenu"></div>
 
 <div class="lib-wrap">
   <div class="lib-top">
     <h2>المكتبة القانونية الرقمية</h2>
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="ابحث عن مؤلف قانوني..." oninput="filterDocs()">
+      <input type="text" id="searchInput" placeholder="ابحث عن قانون أو مادة..." oninput="filterDocs()">
       <select id="catFilter" onchange="filterDocs()">
         <option value="">جميع التصنيفات</option>
+        <option>قانون تجاري</option>
         <option>قانون مدني</option>
         <option>قانون جنائي</option>
-        <option>قانون تجاري</option>
         <option>قانون دستوري</option>
         <option>قانون دولي</option>
         <option>قانون إداري</option>
@@ -40,15 +44,15 @@
 
   <div class="cat-filters">
     <button class="cat-btn active" onclick="setCat(this,'')">الكل</button>
+    <button class="cat-btn" onclick="setCat(this,'قانون تجاري')">قانون تجاري</button>
     <button class="cat-btn" onclick="setCat(this,'قانون مدني')">قانون مدني</button>
     <button class="cat-btn" onclick="setCat(this,'قانون جنائي')">قانون جنائي</button>
-    <button class="cat-btn" onclick="setCat(this,'قانون تجاري')">قانون تجاري</button>
-    <button class="cat-btn" onclick="setCat(this,'قانون دستوري')">قانون دستوري</button>
-    <button class="cat-btn" onclick="setCat(this,'قانون دولي')">قانون دولي</button>
     <button class="cat-btn" onclick="setCat(this,'قانون إداري')">قانون إداري</button>
+    <button class="cat-btn" onclick="setCat(this,'قانون دولي')">قانون دولي</button>
     <button class="cat-btn" onclick="setCat(this,'قانون العمل')">قانون العمل</button>
   </div>
 
+  <div id="resultsCount" style="font-size:13px;color:var(--text3);margin-bottom:16px"></div>
   <div class="docs-grid" id="docsGrid"></div>
 </div>
 
@@ -56,6 +60,7 @@
 <script src="../js/auth.js"></script>
 <script>
 renderNav();
+renderMobileMenu();
 
 function renderLibrary() {
   const docs   = getDocs();
@@ -64,13 +69,22 @@ function renderLibrary() {
   const cat    = document.getElementById('catFilter').value;
 
   const filtered = docs.filter(d => {
-    const ms = !search || d.title.includes(search) || d.content.toLowerCase().includes(search) || d.author.includes(search);
+    const ms = !search ||
+      d.title.toLowerCase().includes(search) ||
+      (d.articles||'').toLowerCase().includes(search) ||
+      (d.author||'').includes(search);
     const mc = !cat || d.cat === cat;
     return ms && mc;
   });
 
+  document.getElementById('resultsCount').textContent =
+    filtered.length ? `عدد النتائج: ${filtered.length} قانون` : '';
+
   if (!filtered.length) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text3);font-family:\'Amiri\',serif;font-size:18px">لا توجد نتائج مطابقة للبحث</div>';
+    grid.innerHTML = `<div class="no-results">
+      <div style="font-size:40px;margin-bottom:12px">🔍</div>
+      <div>لا توجد نتائج مطابقة للبحث</div>
+    </div>`;
     return;
   }
 
@@ -78,10 +92,15 @@ function renderLibrary() {
     <a class="doc-card" href="docview.html?id=${d.id}">
       <span class="doc-cat">${d.cat}</span>
       <div class="doc-title">${d.title}</div>
-      <div class="doc-excerpt">${d.content.substring(0, 180)}...</div>
+      <div class="doc-excerpt">${(d.articles||d.content||'').substring(0,160)}...</div>
+      <div class="doc-tabs-preview">
+        <span class="preview-tab">📄 نصوص المواد</span>
+        <span class="preview-tab">📚 شرح الفقه</span>
+        <span class="preview-tab">⚖️ أحكام النقض</span>
+      </div>
       <div class="doc-meta-r">
-        <span>📅 ${d.year} · ${d.author}</span>
-        <span>👁 ${d.views.toLocaleString('ar-EG')}</span>
+        <span>✍️ ${d.author||''} · ${d.year||''}</span>
+        <span>👁 ${(d.views||0).toLocaleString('ar-EG')}</span>
       </div>
     </a>`).join('');
 }

@@ -18,7 +18,11 @@
     </div>
   </div>
   <div class="nav-btns" id="navBtns"></div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu hidden" id="mobileMenu"></div>
 
 <div class="dash-wrap">
   <!-- SIDEBAR -->
@@ -111,6 +115,7 @@
 <script>
 if (!requireLogin()) void 0;
 renderNav();
+renderMobileMenu();
 
 const S = getSession();
 

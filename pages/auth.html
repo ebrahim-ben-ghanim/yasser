@@ -18,7 +18,11 @@
     </div>
   </div>
   <div class="nav-btns" id="navBtns"></div>
+  <button class="hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-menu hidden" id="mobileMenu"></div>
 
 <div class="auth-wrap">
   <div class="auth-card">
@@ -83,6 +87,7 @@
 const _s = getSession();
 if (_s) window.location.href = _s.type === 'admin' ? 'admin.html' : 'dashboard.html';
 renderNav();
+renderMobileMenu();
 
 function switchTab(t) {
   document.getElementById('loginForm').classList.toggle('hidden', t !== 'login');
